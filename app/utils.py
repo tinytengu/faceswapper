@@ -1,3 +1,4 @@
+import pathlib
 from typing import Any
 
 import cv2
@@ -11,3 +12,7 @@ def pil_to_numpy(image: Image.Image):
 
 def numpy_to_pil(image: np.ndarray | Any):
     return Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+
+
+def get_insightface_root():
+    return pathlib.Path.home() / ".insightface"

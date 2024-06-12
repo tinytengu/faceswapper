@@ -19,7 +19,7 @@ def main():
 
     analyzer = InsightFaceAnalyzer(model_name="buffalo_l", root_dir=INSIGHTFACE_ROOT)
     swapper = InsightFaceSwapper(
-        model_name=INSIGHTFACE_MODELS_DIR / "inswapper_128.onnx"
+        model_name="inswapper_128.onnx", root_dir=INSIGHTFACE_ROOT
     )
 
     source_img_face = analyzer.detect_faces(source_img)[0]
