@@ -1,0 +1,8 @@
+services:
+  my_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/app/data
+    command: ["python", "run.py"]
