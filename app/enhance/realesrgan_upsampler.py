@@ -3,6 +3,7 @@ import pathlib
 import torch
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from basicsr.utils.realesrgan_utils import RealESRGANer
+import numpy as np
 
 
 class RealESRGANUpsampler:
@@ -28,3 +29,13 @@ class RealESRGANUpsampler:
             half=half,
         )
         self.instance = upsampler
+
+    def enhance(
+        self,
+        img: np.ndarray | None = None,
+        outscale: int = 1,
+        alpha_upsampler: str = "realesrgan",
+    ):
+        return self.instance.enhance(
+            img=img, outscale=outscale, alpha_upsampler=alpha_upsampler
+        )

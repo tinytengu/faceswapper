@@ -9,7 +9,7 @@ from basicsr.utils.registry import ARCH_REGISTRY
 from facelib.utils.face_restoration_helper import FaceRestoreHelper
 
 
-from .realesgran_upsampler import RealESRGANUpsampler
+from .realesrgan_upsampler import RealESRGANUpsampler
 
 
 class CodeFormerEnhancer:
@@ -191,4 +191,4 @@ class CodeFormerEnhancer:
         upscale_factor: int = 1,
     ):
         upscale_factor = self.normalize_upscale_factor(upscale_factor, img)
-        return upsampler.instance.enhance(img=img, outscale=upscale_factor)[0]
+        return upsampler.enhance(img=img, outscale=upscale_factor)[0]
