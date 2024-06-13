@@ -9,7 +9,6 @@ import numpy as np
 from app.analysis.insightface import InsightFaceAnalyzer
 from app.swapping.insightface import InsightFaceSwapper
 from app.enhance.codeformer import CodeFormerEnhancer
-from app.enhance.realesgran_upsampler import RealESRGANUpsampler
 
 INSIGHTFACE_ROOT = pathlib.Path.home() / ".insightface"
 INSIGHTFACE_MODELS_DIR = INSIGHTFACE_ROOT / "models"
@@ -38,15 +37,10 @@ def main():
     if not isinstance(swapped_image, np.ndarray):
         raise Exception("Swapping failed")
 
-    upsampler = RealESRGANUpsampler(
-        CODEFORMER_ROOT / "weights/realesrgan/RealESRGAN_x2plus.pth"
-    )
-
     swapped_image = enhancer.enhance_faces(
         img=swapped_image,
         upscale_factor=1,
         fidelity=0.5,
-        upsampler=upsampler,
     )
 
     if isinstance(swapped_image, np.ndarray):
