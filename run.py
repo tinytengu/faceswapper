@@ -10,6 +10,7 @@ from app.analysis.insightface import InsightFaceAnalyzer
 from app.swapping.insightface import InsightFaceSwapper
 from app.enhance.codeformer import CodeFormerEnhancer
 
+ROOT_FOLDER = pathlib.Path(__file__).parent
 INSIGHTFACE_ROOT = pathlib.Path.home() / ".insightface"
 INSIGHTFACE_MODELS_DIR = INSIGHTFACE_ROOT / "models"
 CODEFORMER_ROOT = pathlib.Path("./CodeFormer/").resolve()
@@ -44,7 +45,7 @@ def main():
     )
 
     if isinstance(swapped_image, np.ndarray):
-        cv2.imwrite("result.png", swapped_image)
+        cv2.imwrite(str(ROOT_FOLDER / "output.jpg"), swapped_image)
     else:
         raise ValueError("Swapped image is not a numpy array")
 
