@@ -1,16 +1,19 @@
 import sys
 import pathlib
 
-sys.path.append("./CodeFormer/CodeFormer")
+sys.path.append("./CodeFormer")
 
 import cv2
 import numpy as np
 
 from app.analysis.insightface import InsightFaceAnalyzer
 from app.swapping.insightface import InsightFaceSwapper
+from app.enhance.codeformer import CodeFormerEnhancer
+from app.enhance.realesgran_upsampler import RealESRGANUpsampler
 
 INSIGHTFACE_ROOT = pathlib.Path.home() / ".insightface"
 INSIGHTFACE_MODELS_DIR = INSIGHTFACE_ROOT / "models"
+CODEFORMER_ROOT = pathlib.Path("./CodeFormer/").resolve()
 
 
 def main():
@@ -21,6 +24,7 @@ def main():
     swapper = InsightFaceSwapper(
         model_name="inswapper_128.onnx", root_dir=INSIGHTFACE_ROOT
     )
+    enhancer = CodeFormerEnhancer(CODEFORMER_ROOT)
 
     source_img_face = analyzer.detect_faces(source_img)[0]
     target_img_face = analyzer.detect_faces(target_img)[0]
@@ -31,18 +35,24 @@ def main():
         target_face=target_img_face,
     )
 
+    if not isinstance(swapped_image, np.ndarray):
+        raise Exception("Swapping failed")
+
+    upsampler = RealESRGANUpsampler(
+        CODEFORMER_ROOT / "weights/realesrgan/RealESRGAN_x2plus.pth"
+    )
+
+    swapped_image = enhancer.enhance_faces(
+        img=swapped_image,
+        upscale_factor=1,
+        fidelity=0.5,
+        upsampler=upsampler,
+    )
+
     if isinstance(swapped_image, np.ndarray):
         cv2.imwrite("result.png", swapped_image)
     else:
         raise ValueError("Swapped image is not a numpy array")
-
-    # face_analyzer = get_face_analyzer(
-    #     model_name="buffalo_l",
-    #     providers=["CPUExecutionProvider"],
-    #     # providers=onnxruntime.get_available_providers(),
-    # )
-
-    # face_swapper = get_face_swap_model(model_path=MODELS_DIR / "inswapper_128.onnx")
 
 
 if __name__ == "__main__":
